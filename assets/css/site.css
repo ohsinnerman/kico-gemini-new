@@ -1,0 +1,1600 @@
+/* ==========================================================================
+   KiCo — India's Kitaab Copy (kicoedtech.xyz)
+   Design System & Stylesheet (assets/css/site.css)
+   Direction: artefact-ledger (Seed: d359b348)
+   Structured on VoltAgent/awesome-design-md & Leonxlnx/taste-skill v2
+   ========================================================================== */
+
+/* 1. Self-Hosted Fallback Fonts (@font-face) */
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/Inter-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/Inter-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/Inter-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "InterDisplay";
+  src: url("../fonts/InterDisplay-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 2. Design Tokens (CSS Custom Properties — DESIGN.md Model) */
+:root {
+  /* Colour Roles: Cool Unbleached Ledger Paper, Fountain Carbon Ink & Verification Forest */
+  --bg: #F3F4EF;
+  --surface: #E5E8E0;
+  --surface-strong: #D6DDD0;
+  --ink: #101820;
+  --muted: #404B56;
+  --accent: #0D5C46;
+  --accent-active: #084131;
+  --accent-ink: #FFFFFF;
+
+  /* Dark Architectural Field Roles (Used on Proof Band & Footer) */
+  --field-dark: #101820;
+  --field-dark-surface: #1A2632;
+  --field-dark-ink: #F3F4EF;
+  --field-dark-muted: #B8C2CC;
+
+  /* Semantic & Form/UI Roles */
+  --error: #B42318;
+  --error-bg: #FCE8E6;
+  --success: #0D5C46;
+  --success-bg: #E1F0EB;
+  --ui-border: #BCC6B6;
+  --ui-paper: #FAFBF8;
+
+  /* Typography Roles (2 Typefaces Max + Local WOFF2 Fallbacks) */
+  --font-display: "Fraunces", "InterDisplay", Georgia, serif;
+  --font-text: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+
+  /* 5-Step Fluid Type Scale */
+  --step-small: clamp(0.85rem, 0.82rem + 0.12vw, 0.92rem);
+  --step-body: clamp(1.02rem, 0.99rem + 0.16vw, 1.125rem);
+  --step-lead: clamp(1.15rem, 1.06rem + 0.42vw, 1.38rem);
+  --step-head: clamp(1.65rem, 1.3rem + 1.65vw, 2.55rem);
+  --step-display: clamp(1.95rem, 1.25rem + 2.05vw, 2.95rem);
+
+  /* Layout, Spacing & Shape Tokens */
+  --margin: clamp(1.25rem, 3.5vw, 3.25rem);
+  --gutter: clamp(1rem, 1.8vw, 1.75rem);
+  --section: clamp(4.75rem, 8.5vw, 8rem);
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1.25rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --radius: 4px;
+  --radius-pill: 9999px;
+
+  /* Motion Tokens */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-press: 160ms;
+  --t-reveal: 640ms;
+  --t-crossfade: 1600ms;
+}
+
+/* 3. Reset & Global Guardrails */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto;
+  overflow-x: clip;
+  background-color: var(--bg);
+  color: var(--ink);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--step-body);
+  line-height: 1.55;
+  background-color: var(--bg);
+  color: var(--ink);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+  margin: 0;
+}
+
+ul, ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img, svg, canvas, video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  transition: color var(--t-press) var(--ease-out), opacity var(--t-press) var(--ease-out), transform var(--t-press) var(--ease-out);
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+/* Visible Focus Style Everywhere */
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.dark-field :focus-visible,
+.site-footer :focus-visible {
+  outline-color: var(--field-dark-ink);
+}
+
+/* Skip Link */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--margin);
+  z-index: 1000;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--accent);
+  color: var(--accent-ink);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: var(--radius);
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 4. Typography Rules (2-line headline discipline) */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1.06;
+  text-wrap: balance;
+  hyphens: none;
+}
+
+h1 {
+  font-size: var(--step-display);
+}
+
+h2 {
+  font-size: var(--step-head);
+}
+
+h3 {
+  font-size: var(--step-lead);
+  font-family: var(--font-text);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+p {
+  max-width: 64ch;
+  text-wrap: pretty;
+}
+
+.lead {
+  font-size: var(--step-lead);
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.small {
+  font-size: var(--step-small);
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+a[href^="tel:"] {
+  white-space: nowrap;
+}
+
+/* 5. Frame & Grid Architecture */
+.wrap {
+  width: 100%;
+  max-width: 1360px;
+  margin-inline: auto;
+  padding-inline: var(--margin);
+}
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+
+.grid-12 > * {
+  min-width: 0;
+}
+
+.section {
+  padding-block: var(--section);
+}
+
+.surface-band {
+  background-color: var(--surface);
+}
+
+.dark-field {
+  background-color: var(--field-dark);
+  color: var(--field-dark-ink);
+}
+
+.dark-field .muted,
+.dark-field .small,
+.site-footer .muted,
+.site-footer .small {
+  color: var(--field-dark-muted);
+}
+
+/* 6. Buttons & Interactive Controls (44px Min Tap Target) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 46px;
+  padding: 0.7rem 1.35rem;
+  border: 0;
+  border-radius: var(--radius);
+  font-family: var(--font-text);
+  font-size: var(--step-body);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-press) var(--ease-out), color var(--t-press) var(--ease-out);
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-active);
+  color: var(--accent-ink);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.btn-secondary {
+  background-color: var(--surface-strong);
+  color: var(--ink);
+}
+
+.btn-secondary:hover {
+  background-color: var(--ink);
+  color: var(--bg);
+  transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 0.25rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+}
+
+.text-link:hover {
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* 7. Header & Navigation (Becomes Glass on Scroll) */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--bg);
+  transition: background-color 220ms var(--ease-out);
+}
+
+.site-header.is-scrolled {
+  background-color: rgba(243, 244, 239, 0.82);
+  /* taste-skill-ignore: user requested glass header when page scrolls under it */
+  -webkit-backdrop-filter: blur(14px);
+  /* taste-skill-ignore: user requested glass header when page scrolls under it */
+  backdrop-filter: blur(14px);
+}
+
+/* taste-skill-ignore: user requested glass */
+@supports (backdrop-filter: url(#kico-liquid-refract)) {
+  .site-header.is-scrolled.has-svg-refract {
+    /* taste-skill-ignore: user requested SVG displacement glass refraction in Chromium */
+    backdrop-filter: url(#kico-liquid-refract) blur(12px);
+  }
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 72px;
+}
+
+.brand-wordmark {
+  display: inline-flex;
+  white-space: nowrap;
+  align-items: baseline;
+  gap: 0.55rem;
+  min-height: 44px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.brand-wordmark:hover {
+  color: var(--accent);
+}
+
+.brand-kico {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.brand-sub {
+  font-size: var(--step-small);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.nav-menu-toggle {
+  display: none;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 0.9rem;
+  background-color: var(--surface);
+  color: var(--ink);
+  border: 0;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.4rem 0.7rem;
+  text-decoration: none;
+  font-weight: 500;
+  color: var(--ink);
+  border-radius: var(--radius);
+}
+
+.nav-link:hover {
+  background-color: var(--surface);
+  color: var(--ink);
+}
+
+/* 8. Hero Section & Liquid Glass Bar */
+.hero-section {
+  padding-top: clamp(2rem, 4.5vw, 4rem);
+  padding-bottom: clamp(3.5rem, 6.5vw, 6rem);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: start;
+}
+
+.hero-copy {
+  grid-column: 1 / 6;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+  min-width: 0;
+}
+
+.hero-support {
+  font-size: var(--step-lead);
+  line-height: 1.48;
+  color: var(--ink);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hero-quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hero-powered {
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+
+.hero-powered a {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Liquid Glass Component Layout Rules (from dashersw/liquid-glass-js glass.css) */
+.hero-glass-mount {
+  position: relative;
+  margin-top: 0.25rem;
+  min-height: 58px;
+}
+
+.glass-container {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 24px;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.glass-container-circle {
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+}
+
+.glass-container-pill {
+  border-radius: var(--radius-pill);
+  background-color: rgba(229, 232, 224, 0.55);
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.glass-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glass-button {
+  position: relative;
+  background-color: rgba(250, 251, 248, 0.68);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  user-select: none;
+  z-index: 1;
+  transition: transform var(--t-press) var(--ease-out);
+}
+
+.glass-button:hover {
+  transform: translateY(-1px);
+}
+
+.glass-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.glass-button-circle {
+  border-radius: 50%;
+  padding: 0;
+}
+
+.glass-button-text {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-text);
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Fallback list for Liquid Glass (styled with CSS backdrop-filter when no WebGL) */
+.hero-facts-fallback {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem;
+  background-color: rgba(229, 232, 224, 0.78);
+  border-radius: var(--radius-pill);
+  /* taste-skill-ignore: user requested CSS backdrop-filter fallback for liquid-glass-js */
+  -webkit-backdrop-filter: blur(10px);
+  /* taste-skill-ignore: user requested CSS backdrop-filter fallback for liquid-glass-js */
+  backdrop-filter: blur(10px);
+}
+
+.hero-facts-fallback a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.4rem 0.95rem;
+  background-color: var(--bg);
+  color: var(--ink);
+  border-radius: var(--radius-pill);
+  font-size: var(--step-small);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hero-facts-fallback a:hover {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+html.has-glass:not(.glass-fallback) .hero-facts-fallback {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+html.glass-fallback .glass-mount-target {
+  display: none;
+}
+
+/* Hero Visual Stage (Crossfading [data-ui] Artefacts in 1/1 Grid Cell) */
+.hero-stage-col {
+  grid-column: 6 / 13;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.hero-stage-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.hero-artefact-card {
+  grid-area: 1 / 1;
+  background-color: var(--ui-paper);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+  padding: clamp(1.1rem, 2.2vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--t-crossfade) var(--ease-out), visibility var(--t-crossfade) var(--ease-out);
+}
+
+.hero-artefact-card.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.hero-stage-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.stage-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.stage-tab {
+  min-height: 44px;
+  padding: 0.4rem 0.85rem;
+  background-color: var(--surface);
+  color: var(--ink);
+  border: 0;
+  border-radius: var(--radius);
+  font-size: var(--step-small);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--t-press) var(--ease-out), color var(--t-press) var(--ease-out);
+}
+
+.stage-tab[aria-selected="true"],
+.stage-tab:hover {
+  background-color: var(--ink);
+  color: var(--bg);
+}
+
+/* 9. [data-ui] Interface Fragments (Exempted by taste-skill for realistic work chrome) */
+[data-ui] {
+  background-color: var(--ui-paper);
+  color: var(--ink);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.ui-window-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px solid var(--ui-border);
+  font-size: var(--step-small);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.ui-tag {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  background-color: var(--surface);
+  color: var(--ink);
+  border-radius: var(--radius);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.ui-tag-accent {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.ui-serp-url {
+  font-size: 0.82rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.ui-serp-title {
+  font-family: var(--font-text);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1A0DAB;
+  margin-block: 0.25rem;
+}
+
+.ui-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.ui-metric-box {
+  background-color: var(--bg);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+  padding: 0.65rem 0.75rem;
+}
+
+.ui-metric-val {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.ui-metric-lbl {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.ui-caption {
+  margin-top: 0.75rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--ui-border);
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+
+.ui-bar-chart {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: end;
+  gap: 0.5rem;
+  height: 110px;
+  padding-top: 0.75rem;
+}
+
+.ui-bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  gap: 0.3rem;
+}
+
+.ui-bar-fill {
+  width: 100%;
+  background-color: var(--accent);
+  border-radius: 2px 2px 0 0;
+}
+
+.ui-bar-lbl {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 10. Section 3: Short Statement Section (<= 25 words, set as <p>) */
+.statement-band {
+  padding-block: clamp(2.75rem, 5vw, 4.25rem);
+  background-color: var(--surface);
+}
+
+.statement-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1.1rem + 1.1vw, 2.05rem);
+  line-height: 1.32;
+  max-width: 46ch;
+  color: var(--ink);
+}
+
+/* 11. Section 4: "What You Get" (6 Benefits — Alternating Dossier Rows, Not Icon Cards) */
+.section-header-split {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: end;
+  margin-bottom: clamp(2.25rem, 4.5vw, 3.75rem);
+}
+
+.section-header-split h2 {
+  grid-column: 1 / 7;
+}
+
+.section-header-split p {
+  grid-column: 7 / 13;
+}
+
+.benefits-ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.benefit-row {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: center;
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  background-color: var(--surface);
+  border-radius: var(--radius);
+}
+
+.benefit-row:nth-child(even) {
+  background-color: var(--surface-strong);
+}
+
+.benefit-copy {
+  grid-column: 1 / 6;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.benefit-visual {
+  grid-column: 6 / 13;
+}
+
+.benefit-row:nth-child(even) .benefit-copy {
+  grid-column: 8 / 13;
+  order: 2;
+}
+
+.benefit-row:nth-child(even) .benefit-visual {
+  grid-column: 1 / 8;
+  order: 1;
+}
+
+.benefit-fact {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* 12. Section 5: Syllabus (29 Modules in 5 Stages + Live 12-Week Planner) */
+.planner-bar {
+  background-color: var(--surface-strong);
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: center;
+}
+
+.planner-control {
+  grid-column: 1 / 6;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.planner-label {
+  font-weight: 600;
+}
+
+.planner-input {
+  min-height: 46px;
+  padding: 0.55rem 0.85rem;
+  background-color: var(--ui-paper);
+  color: var(--ink);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+}
+
+.planner-output {
+  grid-column: 6 / 13;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.planner-finish-text {
+  font-size: var(--step-lead);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Sticky wrapping jump links row for stages */
+.syllabus-jump-nav {
+  position: sticky;
+  top: 72px;
+  z-index: 40;
+  background-color: var(--surface);
+  padding: 0.65rem;
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.stage-jump-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.4rem 0.8rem;
+  background-color: var(--bg);
+  color: var(--ink);
+  border-radius: var(--radius);
+  font-size: var(--step-small);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.stage-jump-link:hover {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.syllabus-stages {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.syllabus-stage {
+  background-color: var(--surface);
+  padding: clamp(1.25rem, 2.5vw, 2.25rem);
+  border-radius: var(--radius);
+  scroll-margin-top: 150px;
+}
+
+.stage-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.35rem;
+}
+
+.stage-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1rem;
+}
+
+.module-item {
+  background-color: var(--bg);
+  padding: 1.15rem 1.25rem;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.module-item h4 {
+  font-family: var(--font-text);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.module-item p {
+  font-size: 1rem;
+  line-height: 1.48;
+  color: var(--ink);
+}
+
+/* 13. Section 6: "How the 12 Weeks Run" Interactive Accordion */
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: start;
+}
+
+.accordion-list {
+  grid-column: 1 / 8;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.how-aside {
+  grid-column: 8 / 13;
+}
+
+.accordion-item {
+  background-color: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.accordion-trigger,
+.faq-trigger {
+  width: 100%;
+  min-height: 56px;
+  padding: 1rem 1.25rem;
+  background-color: var(--surface);
+  color: var(--ink);
+  border: 0;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: var(--step-lead);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--t-press) var(--ease-out);
+}
+
+.accordion-trigger:hover,
+.faq-trigger:hover,
+.accordion-trigger[aria-expanded="true"],
+.faq-trigger[aria-expanded="true"] {
+  background-color: var(--surface-strong);
+}
+
+.accordion-indicator {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.accordion-panel,
+.faq-panel {
+  padding: 1.15rem 1.25rem 1.35rem;
+  background-color: var(--bg);
+  color: var(--ink);
+  visibility: visible;
+}
+
+.accordion-panel[hidden],
+.faq-panel[hidden] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* 14. Section 7: "Who It's For" (5 Audiences + Real Course Facts on Dark Field) */
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: start;
+}
+
+.audience-list {
+  grid-column: 1 / 8;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.audience-item {
+  background-color: var(--field-dark-surface);
+  padding: 1.35rem;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.audience-item h3 {
+  color: var(--field-dark-ink);
+}
+
+.audience-item p {
+  color: var(--field-dark-ink);
+}
+
+.facts-matrix {
+  grid-column: 8 / 13;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.fact-cell {
+  background-color: var(--field-dark-surface);
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.fact-big {
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 1.2rem + 1.2vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.05;
+  color: var(--field-dark-ink);
+}
+
+.fact-desc {
+  font-size: var(--step-small);
+  color: var(--field-dark-muted);
+}
+
+/* 15. Section 8: Founder (Gunjan Chowdhary Monograph + Honest Subject Visual) */
+.founder-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: start;
+}
+
+.founder-story {
+  grid-column: 1 / 7;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.founder-credentials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-block: 0.35rem;
+}
+
+.cred-item {
+  background-color: var(--surface-strong);
+  color: var(--ink);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius);
+  font-size: var(--step-small);
+  font-weight: 600;
+}
+
+.founder-visual {
+  grid-column: 7 / 13;
+}
+
+/* 16. Section 9: FAQ (7 Questions, Single-Open) */
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: start;
+}
+
+.faq-intro {
+  grid-column: 1 / 5;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-list {
+  grid-column: 5 / 13;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.faq-item {
+  background-color: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* 17. Section 10: Contact / Reserve Your Seat */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: start;
+}
+
+.contact-details-col {
+  grid-column: 1 / 6;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.contact-block {
+  background-color: var(--surface);
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.contact-form-col {
+  grid-column: 6 / 13;
+  background-color: var(--surface);
+  padding: clamp(1.35rem, 3vw, 2.25rem);
+  border-radius: var(--radius);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-field-full {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  font-size: var(--step-small);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.form-input,
+.form-select {
+  min-height: 46px;
+  padding: 0.6rem 0.85rem;
+  background-color: var(--ui-paper);
+  color: var(--ink);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+}
+
+.form-input[aria-invalid="true"],
+.form-select[aria-invalid="true"] {
+  border-color: var(--error);
+  background-color: var(--error-bg);
+}
+
+.field-hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.consent-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding-block: 0.35rem;
+}
+
+.consent-checkbox {
+  width: 22px;
+  height: 22px;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+  accent-color: var(--accent);
+}
+
+.form-status {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+}
+
+.form-status:empty {
+  display: none;
+}
+
+.form-status.is-error {
+  background-color: var(--error-bg);
+  color: var(--error);
+}
+
+.form-status.is-success {
+  background-color: var(--success-bg);
+  color: var(--ink);
+}
+
+/* 18. Section 11: Footer (Architectural Close) */
+.site-footer {
+  background-color: var(--field-dark);
+  color: var(--field-dark-ink);
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+}
+
+.footer-monument {
+  font-family: var(--font-display);
+  font-size: clamp(2.35rem, 6.2vw, 5.75rem);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--field-dark-ink);
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  margin-bottom: 2.5rem;
+}
+
+.footer-col-addresses {
+  grid-column: 1 / 6;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer-col-links {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-col-cta {
+  grid-column: 10 / 13;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.footer-heading {
+  font-family: var(--font-text);
+  font-size: var(--step-body);
+  font-weight: 700;
+  color: var(--field-dark-ink);
+  margin-bottom: 0.25rem;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--field-dark-muted);
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: var(--field-dark-ink);
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  color: var(--field-dark-muted);
+  font-size: var(--step-small);
+}
+
+/* 19. Legal & 404 Page Layout */
+.legal-main {
+  padding-block: clamp(3rem, 6vw, 5.5rem);
+}
+
+.legal-container {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: start;
+}
+
+.legal-sidebar {
+  grid-column: 1 / 5;
+  background-color: var(--surface);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.legal-content {
+  grid-column: 5 / 13;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.legal-section {
+  background-color: var(--surface);
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* 20. Motion & Entrances (Gated behind html.js, disabled under reduced motion) */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal] {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity var(--t-reveal) var(--ease-expo), transform var(--t-reveal) var(--ease-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  html.js [data-reveal].is-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html.js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* 21. Responsive Breakpoints (Tablet <= 1024px, Mobile <= 767px) */
+@media (max-width: 1024px) {
+  .hero-copy {
+    grid-column: 1 / 13;
+  }
+
+  .hero-stage-col {
+    grid-column: 1 / 13;
+    margin-top: 1rem;
+  }
+
+  .section-header-split h2,
+  .section-header-split p {
+    grid-column: 1 / 13;
+  }
+
+  .benefit-copy,
+  .benefit-visual,
+  .benefit-row:nth-child(even) .benefit-copy,
+  .benefit-row:nth-child(even) .benefit-visual {
+    grid-column: 1 / 13;
+    order: initial;
+  }
+
+  .planner-control,
+  .planner-output,
+  .accordion-list,
+  .how-aside,
+  .audience-list,
+  .facts-matrix,
+  .founder-story,
+  .founder-visual,
+  .faq-intro,
+  .faq-list,
+  .contact-details-col,
+  .contact-form-col,
+  .legal-sidebar,
+  .legal-content {
+    grid-column: 1 / 13;
+  }
+
+  .footer-col-addresses {
+    grid-column: 1 / 7;
+  }
+
+  .footer-col-links {
+    grid-column: span 3;
+  }
+
+  .footer-col-cta {
+    grid-column: 1 / 13;
+  }
+}
+
+@media (max-width: 900px) {
+  .nav-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .primary-nav {
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background-color: var(--surface-strong);
+    padding: 1rem var(--margin) 1.5rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .primary-nav[hidden] {
+    display: none !important;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --step-display: clamp(1.85rem, 6.8vw, 2.35rem);
+    --step-head: clamp(1.5rem, 5.4vw, 1.95rem);
+  }
+
+  .accordion-trigger,
+  .faq-trigger {
+    font-size: 1.02rem;
+    line-height: 1.3;
+    padding: 0.85rem 1rem;
+  }
+
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .facts-matrix {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .footer-col-addresses,
+  .footer-col-links,
+  .footer-col-cta {
+    grid-column: 1 / 13;
+  }
+}

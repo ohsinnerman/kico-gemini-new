@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="KiCo icon">
+  <rect width="64" height="64" rx="8" fill="#101820" />
+  <rect x="8" y="8" width="48" height="48" rx="4" fill="#F3F4EF" />
+  <rect x="15" y="8" width="4" height="48" fill="#0D5C46" />
+  <path d="M26 20h4.5v10.2L39.2 20H45l-9.2 10.6L45.6 44h-5.8l-7.2-10.1-2.1 2.3V44H26V20z" fill="#101820" />
+</svg>
